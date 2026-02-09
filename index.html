@@ -1,0 +1,1986 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FundFlow | Premium Crowdfunding Platform</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            /* Light Theme */
+            --light-bg: #f8fafc;
+            --light-card: #ffffff;
+            --light-text: #1e293b;
+            --light-text-secondary: #64748b;
+            --light-primary: #3b82f6;
+            --light-primary-dark: #2563eb;
+            --light-secondary: #8b5cf6;
+            --light-accent: #06b6d4;
+            --light-success: #10b981;
+            --light-warning: #f59e0b;
+            --light-danger: #ef4444;
+            --light-border: #e2e8f0;
+            --light-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+            
+            /* Dark Theme */
+            --dark-bg: #0f172a;
+            --dark-card: #1e293b;
+            --dark-text: #f1f5f9;
+            --dark-text-secondary: #94a3b8;
+            --dark-primary: #60a5fa;
+            --dark-primary-dark: #3b82f6;
+            --dark-secondary: #a78bfa;
+            --dark-accent: #22d3ee;
+            --dark-success: #34d399;
+            --dark-warning: #fbbf24;
+            --dark-danger: #f87171;
+            --dark-border: #334155;
+            --dark-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+            
+            /* Common */
+            --radius-lg: 20px;
+            --radius-md: 12px;
+            --radius-sm: 8px;
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            --gradient-primary: linear-gradient(135deg, #3b82f6, #8b5cf6);
+            --gradient-success: linear-gradient(135deg, #10b981, #06b6d4);
+            --gradient-warning: linear-gradient(135deg, #f59e0b, #ec4899);
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background-color: var(--light-bg);
+            color: var(--light-text);
+            line-height: 1.6;
+            min-height: 100vh;
+            transition: var(--transition);
+        }
+
+        body.dark-mode {
+            background-color: var(--dark-bg);
+            color: var(--dark-text);
+        }
+
+        .container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        /* Theme Toggle */
+        .theme-toggle-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+        }
+
+        .theme-toggle {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: var(--light-card);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: var(--light-shadow);
+            border: 2px solid var(--light-border);
+            transition: var(--transition);
+        }
+
+        .dark-mode .theme-toggle {
+            background: var(--dark-card);
+            border-color: var(--dark-border);
+            box-shadow: var(--dark-shadow);
+        }
+
+        .theme-toggle i {
+            font-size: 1.2rem;
+            color: var(--light-primary);
+            transition: var(--transition);
+        }
+
+        .dark-mode .theme-toggle i {
+            color: var(--dark-primary);
+        }
+
+        .theme-toggle:hover {
+            transform: rotate(30deg) scale(1.1);
+        }
+
+        /* Header */
+        header {
+            padding: 30px 0;
+            position: relative;
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+        }
+
+        .logo-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 14px;
+            background: var(--gradient-primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.5rem;
+            box-shadow: 0 6px 20px rgba(59, 130, 246, 0.3);
+        }
+
+        .logo-text {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.8rem;
+            font-weight: 800;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 32px;
+        }
+
+        .nav-link {
+            color: var(--light-text-secondary);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 1rem;
+            position: relative;
+            padding: 8px 0;
+            transition: var(--transition);
+        }
+
+        .dark-mode .nav-link {
+            color: var(--dark-text-secondary);
+        }
+
+        .nav-link:hover, .nav-link.active {
+            color: var(--light-primary);
+        }
+
+        .dark-mode .nav-link:hover, .dark-mode .nav-link.active {
+            color: var(--dark-primary);
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--gradient-primary);
+            border-radius: 1px;
+            transition: width 0.3s ease;
+        }
+
+        .nav-link.active::after {
+            width: 100%;
+        }
+
+        .nav-actions {
+            display: flex;
+            gap: 16px;
+            align-items: center;
+        }
+
+        /* Buttons */
+        .btn {
+            padding: 12px 28px;
+            border-radius: var(--radius-md);
+            font-weight: 600;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: var(--transition);
+            border: none;
+            font-family: 'Outfit', sans-serif;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: var(--gradient-primary);
+            color: white;
+            box-shadow: 0 6px 20px rgba(59, 130, 246, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 30px rgba(59, 130, 246, 0.4);
+        }
+
+        .btn-outline {
+            background: transparent;
+            color: var(--light-primary);
+            border: 2px solid var(--light-border);
+        }
+
+        .dark-mode .btn-outline {
+            color: var(--dark-primary);
+            border-color: var(--dark-border);
+        }
+
+        .btn-outline:hover {
+            background: var(--light-primary);
+            color: white;
+            border-color: var(--light-primary);
+        }
+
+        .dark-mode .btn-outline:hover {
+            background: var(--dark-primary);
+            border-color: var(--dark-primary);
+        }
+
+        .btn-success {
+            background: var(--gradient-success);
+            color: white;
+            box-shadow: 0 6px 20px rgba(16, 185, 129, 0.3);
+        }
+
+        .btn-success:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 30px rgba(16, 185, 129, 0.4);
+        }
+
+        .user-avatar {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background: var(--gradient-primary);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            border: 2px solid transparent;
+        }
+
+        .user-avatar:hover {
+            transform: scale(1.1);
+            border-color: var(--light-primary);
+        }
+
+        .dark-mode .user-avatar:hover {
+            border-color: var(--dark-primary);
+        }
+
+        /* Hero Section */
+        .hero {
+            padding: 80px 0 120px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-background {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 100%;
+            background: var(--gradient-primary);
+            opacity: 0.03;
+            z-index: -1;
+        }
+
+        .hero-content {
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .hero-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 3.5rem;
+            font-weight: 800;
+            margin-bottom: 24px;
+            line-height: 1.1;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-subtitle {
+            font-size: 1.2rem;
+            color: var(--light-text-secondary);
+            margin-bottom: 48px;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .dark-mode .hero-subtitle {
+            color: var(--dark-text-secondary);
+        }
+
+        .hero-stats {
+            display: flex;
+            justify-content: center;
+            gap: 60px;
+            margin-top: 80px;
+            flex-wrap: wrap;
+        }
+
+        .stat-card {
+            text-align: center;
+            padding: 24px;
+            background: var(--light-card);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--light-shadow);
+            min-width: 180px;
+            transition: var(--transition);
+            border: 1px solid var(--light-border);
+        }
+
+        .dark-mode .stat-card {
+            background: var(--dark-card);
+            border-color: var(--dark-border);
+            box-shadow: var(--dark-shadow);
+        }
+
+        .stat-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 16px;
+            background: var(--gradient-primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.5rem;
+            margin: 0 auto 20px;
+        }
+
+        .stat-value {
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 8px;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            color: var(--light-text-secondary);
+            font-weight: 500;
+        }
+
+        .dark-mode .stat-label {
+            color: var(--dark-text-secondary);
+        }
+
+        /* Main Content */
+        .main-content {
+            padding: 40px 0 80px;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 40px;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .section-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 2.2rem;
+            font-weight: 700;
+            color: var(--light-text);
+        }
+
+        .dark-mode .section-title {
+            color: var(--dark-text);
+        }
+
+        /* Category Filters */
+        .category-filters {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 40px;
+            flex-wrap: wrap;
+        }
+
+        .category-filter {
+            padding: 12px 24px;
+            border-radius: 50px;
+            background: var(--light-card);
+            border: 2px solid var(--light-border);
+            color: var(--light-text-secondary);
+            font-weight: 500;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .dark-mode .category-filter {
+            background: var(--dark-card);
+            border-color: var(--dark-border);
+            color: var(--dark-text-secondary);
+        }
+
+        .category-filter:hover, .category-filter.active {
+            background: var(--gradient-primary);
+            color: white;
+            border-color: transparent;
+            transform: translateY(-2px);
+        }
+
+        .category-filter.active {
+            box-shadow: 0 6px 20px rgba(59, 130, 246, 0.3);
+        }
+
+        /* Projects Grid */
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+            gap: 30px;
+            margin-bottom: 80px;
+        }
+
+        @media (max-width: 768px) {
+            .projects-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Project Card */
+        .project-card {
+            background: var(--light-card);
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            box-shadow: var(--light-shadow);
+            transition: var(--transition);
+            border: 1px solid var(--light-border);
+            position: relative;
+        }
+
+        .dark-mode .project-card {
+            background: var(--dark-card);
+            border-color: var(--dark-border);
+            box-shadow: var(--dark-shadow);
+        }
+
+        .project-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.15);
+        }
+
+        .dark-mode .project-card:hover {
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4);
+        }
+
+        .project-header {
+            padding: 24px 24px 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+
+        .project-category {
+            padding: 8px 16px;
+            border-radius: 50px;
+            background: var(--gradient-primary);
+            color: white;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .project-favorite {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.9);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #ef4444;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .dark-mode .project-favorite {
+            background: rgba(30, 41, 59, 0.9);
+        }
+
+        .project-favorite:hover {
+            transform: scale(1.1);
+        }
+
+        .project-image {
+            height: 200px;
+            margin: 20px 24px;
+            border-radius: var(--radius-md);
+            overflow: hidden;
+            position: relative;
+        }
+.project-image::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: var(--gradient-primary);
+    opacity: 0.3; /* Reduced opacity to see images better */
+    z-index: 1;
+}
+
+        .project-image-content {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 2;
+            color: white;
+            font-size: 3.5rem;
+        }
+
+        .project-info {
+            padding: 0 24px 24px;
+        }
+
+        .project-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.4rem;
+            font-weight: 700;
+            margin-bottom: 12px;
+            color: var(--light-text);
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .dark-mode .project-title {
+            color: var(--dark-text);
+        }
+
+        .project-description {
+            color: var(--light-text-secondary);
+            margin-bottom: 24px;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .dark-mode .project-description {
+            color: var(--dark-text-secondary);
+        }
+
+        .project-creator {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 24px;
+        }
+
+        .creator-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--gradient-warning);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+        }
+
+        .creator-info h4 {
+            font-weight: 600;
+            font-size: 0.95rem;
+            margin-bottom: 4px;
+        }
+
+        .creator-info p {
+            font-size: 0.85rem;
+            color: var(--light-text-secondary);
+        }
+
+        .dark-mode .creator-info p {
+            color: var(--dark-text-secondary);
+        }
+
+        .project-progress {
+            margin-bottom: 20px;
+        }
+
+        .progress-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 12px;
+        }
+
+        .progress-percentage {
+            font-weight: 700;
+            color: var(--light-primary);
+            font-size: 1.1rem;
+        }
+
+        .dark-mode .progress-percentage {
+            color: var(--dark-primary);
+        }
+
+        .progress-goal {
+            color: var(--light-text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .dark-mode .progress-goal {
+            color: var(--dark-text-secondary);
+        }
+
+        .progress-bar {
+            height: 8px;
+            background-color: var(--light-border);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .dark-mode .progress-bar {
+            background-color: var(--dark-border);
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: var(--gradient-primary);
+            border-radius: 4px;
+            transition: width 1s ease;
+        }
+
+        .project-stats {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 24px;
+            padding-top: 20px;
+            border-top: 1px solid var(--light-border);
+        }
+
+        .dark-mode .project-stats {
+            border-top-color: var(--dark-border);
+        }
+
+        .stat {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 1.2rem;
+            font-weight: 700;
+            margin-bottom: 4px;
+            color: var(--light-text);
+        }
+
+        .dark-mode .stat-value {
+            color: var(--dark-text);
+        }
+
+        .stat-label {
+            font-size: 0.8rem;
+            color: var(--light-text-secondary);
+        }
+
+        .dark-mode .stat-label {
+            color: var(--dark-text-secondary);
+        }
+
+        .project-actions {
+            display: flex;
+            gap: 12px;
+        }
+
+        .project-actions .btn {
+            flex: 1;
+        }
+
+        /* Modals */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            backdrop-filter: blur(5px);
+        }
+
+        .modal-content {
+            background: var(--light-card);
+            border-radius: var(--radius-lg);
+            width: 100%;
+            max-width: 900px;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.25);
+            border: 1px solid var(--light-border);
+            animation: modalAppear 0.3s ease forwards;
+        }
+
+        .dark-mode .modal-content {
+            background: var(--dark-card);
+            border-color: var(--dark-border);
+        }
+
+        @keyframes modalAppear {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .modal-header {
+            padding: 32px 32px 20px;
+            border-bottom: 1px solid var(--light-border);
+            position: relative;
+        }
+
+        .dark-mode .modal-header {
+            border-bottom-color: var(--dark-border);
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 28px;
+            right: 28px;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--light-border);
+            border: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            color: var(--light-text-secondary);
+            transition: var(--transition);
+        }
+
+        .dark-mode .close-modal {
+            background: var(--dark-border);
+            color: var(--dark-text-secondary);
+        }
+
+        .close-modal:hover {
+            background: var(--light-primary);
+            color: white;
+        }
+
+        .dark-mode .close-modal:hover {
+            background: var(--dark-primary);
+        }
+
+        .modal-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 12px;
+            color: var(--light-text);
+        }
+
+        .dark-mode .modal-title {
+            color: var(--dark-text);
+        }
+
+        .modal-body {
+            padding: 32px;
+        }
+
+        /* Contribution Form */
+        .contribution-card {
+            background: var(--light-card);
+            border-radius: var(--radius-lg);
+            padding: 32px;
+            box-shadow: var(--light-shadow);
+            border: 1px solid var(--light-border);
+        }
+
+        .dark-mode .contribution-card {
+            background: var(--dark-card);
+            border-color: var(--dark-border);
+            box-shadow: var(--dark-shadow);
+        }
+
+        .amount-options {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            gap: 12px;
+            margin-bottom: 24px;
+        }
+
+        .amount-option {
+            padding: 16px;
+            border-radius: var(--radius-md);
+            background: var(--light-border);
+            text-align: center;
+            cursor: pointer;
+            transition: var(--transition);
+            border: 2px solid transparent;
+        }
+
+        .dark-mode .amount-option {
+            background: var(--dark-border);
+        }
+
+        .amount-option:hover, .amount-option.selected {
+            background: var(--gradient-primary);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(59, 130, 246, 0.3);
+        }
+
+        .custom-amount {
+            margin-bottom: 24px;
+        }
+
+        .payment-methods {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 12px;
+            margin-bottom: 32px;
+        }
+
+        .payment-method {
+            padding: 16px;
+            border-radius: var(--radius-md);
+            background: var(--light-border);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            cursor: pointer;
+            transition: var(--transition);
+            border: 2px solid transparent;
+        }
+
+        .dark-mode .payment-method {
+            background: var(--dark-border);
+        }
+
+        .payment-method:hover, .payment-method.selected {
+            border-color: var(--light-primary);
+            background: var(--light-card);
+        }
+
+        .dark-mode .payment-method:hover, .dark-mode .payment-method.selected {
+            border-color: var(--dark-primary);
+            background: var(--dark-card);
+        }
+
+        .payment-method i {
+            font-size: 1.5rem;
+            color: var(--light-primary);
+        }
+
+        .dark-mode .payment-method i {
+            color: var(--dark-primary);
+        }
+
+        /* Create Project Form */
+        .create-form {
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .form-group {
+            margin-bottom: 28px;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: 600;
+            color: var(--light-text);
+            font-size: 1rem;
+        }
+
+        .dark-mode .form-label {
+            color: var(--dark-text);
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 16px;
+            border-radius: var(--radius-md);
+            border: 2px solid var(--light-border);
+            background: var(--light-card);
+            color: var(--light-text);
+            font-size: 1rem;
+            font-family: 'Outfit', sans-serif;
+            transition: var(--transition);
+        }
+
+        .dark-mode .form-control {
+            background: var(--dark-card);
+            border-color: var(--dark-border);
+            color: var(--dark-text);
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--light-primary);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+
+        .dark-mode .form-control:focus {
+            border-color: var(--dark-primary);
+            box-shadow: 0 0 0 3px rgba(96, 165, 250, 0.2);
+        }
+
+        /* Footer */
+        footer {
+            background: var(--light-card);
+            padding: 60px 0 30px;
+            border-top: 1px solid var(--light-border);
+            margin-top: 80px;
+        }
+
+        .dark-mode footer {
+            background: var(--dark-card);
+            border-top-color: var(--dark-border);
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+
+        .footer-logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .footer-logo-text {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.8rem;
+            font-weight: 800;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .footer-description {
+            color: var(--light-text-secondary);
+            max-width: 300px;
+        }
+
+        .dark-mode .footer-description {
+            color: var(--dark-text-secondary);
+        }
+
+        .footer-heading {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            color: var(--light-text);
+        }
+
+        .dark-mode .footer-heading {
+            color: var(--dark-text);
+        }
+
+        .footer-links {
+            list-style: none;
+        }
+
+        .footer-links li {
+            margin-bottom: 12px;
+        }
+
+        .footer-links a {
+            color: var(--light-text-secondary);
+            text-decoration: none;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .dark-mode .footer-links a {
+            color: var(--dark-text-secondary);
+        }
+
+        .footer-links a:hover {
+            color: var(--light-primary);
+            transform: translateX(5px);
+        }
+
+        .dark-mode .footer-links a:hover {
+            color: var(--dark-primary);
+        }
+
+        .social-links {
+            display: flex;
+            gap: 16px;
+            margin-top: 20px;
+        }
+
+        .social-link {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background: var(--light-border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--light-text-secondary);
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .dark-mode .social-link {
+            background: var(--dark-border);
+            color: var(--dark-text-secondary);
+        }
+
+        .social-link:hover {
+            background: var(--gradient-primary);
+            color: white;
+            transform: translateY(-3px);
+        }
+
+        .copyright {
+            text-align: center;
+            padding-top: 30px;
+            border-top: 1px solid var(--light-border);
+            color: var(--light-text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .dark-mode .copyright {
+            border-top-color: var(--dark-border);
+            color: var(--dark-text-secondary);
+        }
+
+        /* Responsive */
+        @media (max-width: 992px) {
+            .navbar {
+                flex-direction: column;
+                gap: 20px;
+            }
+            
+            .nav-links {
+                gap: 20px;
+            }
+            
+            .hero-title {
+                font-size: 2.8rem;
+            }
+            
+            .hero-stats {
+                gap: 30px;
+            }
+            
+            .stat-card {
+                min-width: 150px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .hero-title {
+                font-size: 2.2rem;
+            }
+            
+            .section-title {
+                font-size: 1.8rem;
+            }
+            
+            .modal-body {
+                padding: 24px;
+            }
+            
+            .project-actions {
+                flex-direction: column;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .hero-stats {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .stat-card {
+                width: 100%;
+                max-width: 250px;
+            }
+            
+            .category-filters {
+                justify-content: center;
+            }
+        }
+
+        /* Utility Classes */
+        .hidden {
+            display: none !important;
+        }
+
+        .text-center {
+            text-align: center;
+        }
+
+        .mb-20 {
+            margin-bottom: 20px;
+        }
+
+        .mb-40 {
+            margin-bottom: 40px;
+        }
+
+        .mt-20 {
+            margin-top: 20px;
+        }
+
+        .mt-40 {
+            margin-top: 40px;
+        }
+
+        .w-100 {
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+    <!-- Theme Toggle -->
+    <div class="theme-toggle-container">
+        <div class="theme-toggle" id="theme-toggle">
+            <i class="fas fa-moon"></i>
+        </div>
+    </div>
+
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <nav class="navbar">
+                <a href="#" class="logo">
+                    <div class="logo-icon">
+                        <i class="fas fa-rocket"></i>
+                    </div>
+                    <div class="logo-text">FundFlow</div>
+                </a>
+                
+                <div class="nav-links">
+                    <a href="#" class="nav-link active">Discover</a>
+                    <a href="#" class="nav-link">How it Works</a>
+                    <a href="#" class="nav-link">Categories</a>
+                    <a href="#" class="nav-link">Success Stories</a>
+                    <a href="#" class="nav-link">Resources</a>
+                </div>
+                
+                <div class="nav-actions">
+                    <button class="btn btn-outline" id="login-btn">
+                        <i class="fas fa-sign-in-alt"></i> Log In
+                    </button>
+                    <button class="btn btn-primary" id="create-project-btn">
+                        <i class="fas fa-plus"></i> Start a Project
+                    </button>
+                    <!-- <div class="user-avatar" id="user-avatar">JD</div> -->
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-background"></div>
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="hero-title">Bring Ideas to Life with Community Support</h1>
+                <p class="hero-subtitle">FundFlow connects visionary creators with supportive backers. Launch your project, set funding goals, and receive contributions from people who believe in your vision.</p>
+                <button class="btn btn-primary" style="padding: 16px 40px; font-size: 1.1rem;" id="hero-create-btn">
+                    <i class="fas fa-rocket"></i> Start Your Journey
+                </button>
+                
+                <div class="hero-stats">
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-hand-holding-usd"></i>
+                        </div>
+                        <div class="stat-value" id="total-funded">$4.2M</div>
+                        <div class="stat-label">Total Funded</div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-project-diagram"></i>
+                        </div>
+                        <div class="stat-value" id="total-projects">1,847</div>
+                        <div class="stat-label">Projects Funded</div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <div class="stat-value" id="total-backers">68,492</div>
+                        <div class="stat-label">Global Backers</div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-chart-line"></i>
+                        </div>
+                        <div class="stat-value">84%</div>
+                        <div class="stat-label">Success Rate</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <div class="container main-content">
+        <div class="section-header">
+            <h2 class="section-title">Featured Projects</h2>
+            <div class="category-filters">
+                <button class="category-filter active" data-filter="all">
+                    <i class="fas fa-globe"></i> All
+                </button>
+                <button class="category-filter" data-filter="tech">
+                    <i class="fas fa-microchip"></i> Technology
+                </button>
+                <button class="category-filter" data-filter="art">
+                    <i class="fas fa-palette"></i> Art & Design
+                </button>
+                <button class="category-filter" data-filter="film">
+                    <i class="fas fa-film"></i> Film & Video
+                </button>
+                <button class="category-filter" data-filter="food">
+                    <i class="fas fa-utensils"></i> Food & Craft
+                </button>
+                <button class="category-filter" data-filter="social">
+                    <i class="fas fa-hands-helping"></i> Social Good
+                </button>
+            </div>
+        </div>
+
+        <!-- Projects Grid -->
+        <div class="projects-grid" id="projects-grid">
+            <!-- Projects will be dynamically added here -->
+        </div>
+        
+        <div class="text-center">
+            <button class="btn btn-outline" id="load-more-btn">
+                <i class="fas fa-sync-alt"></i> Load More Projects
+            </button>
+        </div>
+    </div>
+
+    <!-- Project Details Modal -->
+    <div class="modal" id="project-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button class="close-modal" id="close-modal">
+                    <i class="fas fa-times"></i>
+                </button>
+                <h2 class="modal-title" id="modal-project-title">Project Title</h2>
+                <div class="project-creator">
+                    <div class="creator-avatar" id="modal-creator-avatar">JD</div>
+                    <div>
+                        <h4 id="modal-creator-name">John Doe</h4>
+                        <p>Created <span id="modal-created-date">2 days ago</span></p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="modal-body">
+                <div class="contribution-card mb-40">
+                    <h3 class="section-title mb-20">Support This Project</h3>
+                    <div class="amount-options" id="amount-options">
+                        <div class="amount-option" data-amount="25">
+                            <div style="font-size: 1.5rem; font-weight: 700;">$25</div>
+                            <div style="font-size: 0.8rem;">Backer</div>
+                        </div>
+                        <div class="amount-option" data-amount="50">
+                            <div style="font-size: 1.5rem; font-weight: 700;">$50</div>
+                            <div style="font-size: 0.8rem;">Supporter</div>
+                        </div>
+                        <div class="amount-option selected" data-amount="100">
+                            <div style="font-size: 1.5rem; font-weight: 700;">$100</div>
+                            <div style="font-size: 0.8rem;">Early Bird</div>
+                        </div>
+                        <div class="amount-option" data-amount="250">
+                            <div style="font-size: 1.5rem; font-weight: 700;">$250</div>
+                            <div style="font-size: 0.8rem;">Premium</div>
+                        </div>
+                        <div class="amount-option" data-amount="500">
+                            <div style="font-size: 1.5rem; font-weight: 700;">$500</div>
+                            <div style="font-size: 0.8rem;">VIP</div>
+                        </div>
+                    </div>
+                    
+                    <div class="custom-amount">
+                        <label class="form-label">Or Enter Custom Amount</label>
+                        <input type="number" class="form-control" id="custom-amount" placeholder="Enter amount in USD" min="1">
+                    </div>
+                    
+                    <div class="payment-methods">
+                        <div class="payment-method selected" data-method="card">
+                            <i class="far fa-credit-card"></i>
+                            <div>
+                                <div style="font-weight: 600;">Credit Card</div>
+                                <div style="font-size: 0.8rem;">Visa, Mastercard, Amex</div>
+                            </div>
+                        </div>
+                        <div class="payment-method" data-method="paypal">
+                            <i class="fab fa-paypal"></i>
+                            <div>
+                                <div style="font-weight: 600;">PayPal</div>
+                                <div style="font-size: 0.8rem;">Secure PayPal payment</div>
+                            </div>
+                        </div>
+                        <div class="payment-method" data-method="crypto">
+                            <i class="fab fa-bitcoin"></i>
+                            <div>
+                                <div style="font-weight: 600;">Crypto</div>
+                                <div style="font-size: 0.8rem;">Bitcoin, Ethereum</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <button class="btn btn-primary w-100" id="contribute-btn" style="padding: 18px;">
+                        <i class="fas fa-lock"></i> Contribute Now
+                    </button>
+                </div>
+                
+                <div class="contribution-card">
+                    <h3 class="section-title mb-20">Project Details</h3>
+                    <div class="project-progress mb-20">
+                        <div class="progress-header">
+                            <div class="progress-percentage" id="modal-progress-percentage">0%</div>
+                            <div class="progress-goal">Goal: <span id="modal-project-goal">$10,000</span></div>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="modal-progress-fill" style="width: 0%"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="project-stats mb-20">
+                        <div class="stat">
+                            <div class="stat-value" id="modal-funded-amount">$0</div>
+                            <div class="stat-label">Funded</div>
+                        </div>
+                        <div class="stat">
+                            <div class="stat-value" id="modal-backers-count">0</div>
+                            <div class="stat-label">Backers</div>
+                        </div>
+                        <div class="stat">
+                            <div class="stat-value" id="modal-days-left">30</div>
+                            <div class="stat-label">Days Left</div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Project Description</label>
+                        <div class="form-control" style="min-height: 150px; overflow-y: auto;" id="modal-project-description">
+                            Project description will appear here...
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Create Project Modal -->
+    <div class="modal" id="create-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button class="close-modal" id="close-create-modal">
+                    <i class="fas fa-times"></i>
+                </button>
+                <h2 class="modal-title">Launch Your Project</h2>
+                <p>Turn your vision into reality with community support</p>
+            </div>
+            
+            <div class="modal-body">
+                <form class="create-form" id="create-project-form">
+                    <div class="form-group">
+                        <label class="form-label">Project Title *</label>
+                        <input type="text" class="form-control" id="project-title" placeholder="Give your project a compelling name" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Category *</label>
+                        <select class="form-control" id="project-category" required>
+                            <option value="">Select a category</option>
+                            <option value="tech">Technology & Innovation</option>
+                            <option value="art">Art & Design</option>
+                            <option value="film">Film & Video</option>
+                            <option value="food">Food & Craft</option>
+                            <option value="social">Social Good</option>
+                            <option value="music">Music</option>
+                            <option value="games">Games</option>
+                            <option value="publishing">Publishing</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Funding Goal (USD) *</label>
+                        <input type="number" class="form-control" id="project-goal" placeholder="How much do you need to bring your project to life?" min="100" required>
+                        <small style="color: var(--light-text-secondary); margin-top: 8px; display: block;">Most successful projects set goals between $1,000 and $50,000</small>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Campaign Duration (Days) *</label>
+                        <input type="number" class="form-control" id="project-duration" min="1" max="60" value="30" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Project Story *</label>
+                        <textarea class="form-control" id="project-description" rows="6" placeholder="Tell your story. What is your project about? Why is it important? Why should people support it?" required></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Project Image URL</label>
+                        <input type="text" class="form-control" id="project-image" placeholder="https://example.com/your-project-image.jpg">
+                        <small style="color: var(--light-text-secondary); margin-top: 8px; display: block;">A compelling image increases your chances of success by up to 50%</small>
+                    </div>
+                    
+                    <div class="form-group" style="display: flex; gap: 16px;">
+                        <button type="submit" class="btn btn-primary" style="flex: 1; padding: 18px;">
+                            <i class="fas fa-paper-plane"></i> Launch Project
+                        </button>
+                        <button type="button" class="btn btn-outline" id="cancel-create" style="flex: 1; padding: 18px;">
+                            Cancel
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Login Modal -->
+    <div class="modal" id="login-modal">
+        <div class="modal-content" style="max-width: 500px;">
+            <div class="modal-header">
+                <button class="close-modal" id="close-login-modal">
+                    <i class="fas fa-times"></i>
+                </button>
+                <h2 class="modal-title">Welcome Back</h2>
+            </div>
+            
+            <div class="modal-body">
+                <form id="login-form">
+                    <div class="form-group">
+                        <label class="form-label">Email Address</label>
+                        <input type="email" class="form-control" id="login-email" placeholder="you@example.com" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Password</label>
+                        <input type="password" class="form-control" id="login-password" placeholder="Enter your password" required>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary w-100" style="padding: 18px;">
+                        <i class="fas fa-sign-in-alt"></i> Log In
+                    </button>
+                    
+                    <div class="text-center mt-20">
+                        <a href="#" style="color: var(--light-primary); text-decoration: none; font-weight: 500;">Forgot password?</a>
+                        <p class="mt-20">Don't have an account? <a href="#" style="color: var(--light-primary); font-weight: 500;" id="show-signup">Sign up</a></p>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Success Modal -->
+    <div class="modal" id="success-modal">
+        <div class="modal-content" style="max-width: 500px;">
+            <div class="modal-body text-center">
+                <div style="width: 100px; height: 100px; background: var(--gradient-success); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 30px;">
+                    <i class="fas fa-check" style="color: white; font-size: 2.5rem;"></i>
+                </div>
+                <h2 class="modal-title">Success!</h2>
+                <p id="success-message" style="color: var(--light-text-secondary); margin-bottom: 30px;">Your action was completed successfully.</p>
+                <button class="btn btn-primary" id="close-success-modal" style="padding: 16px 40px;">
+                    Continue
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div>
+                    <div class="footer-logo">
+                        <div class="logo-icon" style="width: 40px; height: 40px; font-size: 1.2rem;">
+                            <i class="fas fa-rocket"></i>
+                        </div>
+                        <div class="footer-logo-text">FundFlow</div>
+                    </div>
+                    <p class="footer-description">Empowering creators worldwide to bring their ideas to life through community funding and support.</p>
+                    <div class="social-links">
+                        <a href="#" class="social-link">
+                            <i class="fab fa-twitter"></i>
+                        </a>
+                        <a href="#" class="social-link">
+                            <i class="fab fa-facebook-f"></i>
+                        </a>
+                        <a href="#" class="social-link">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                        <a href="#" class="social-link">
+                            <i class="fab fa-linkedin-in"></i>
+                        </a>
+                    </div>
+                </div>
+                
+                <div>
+                    <h3 class="footer-heading">Discover</h3>
+                    <ul class="footer-links">
+                        <li><a href="#"><i class="fas fa-chevron-right"></i> Technology Projects</a></li>
+                        <li><a href="#"><i class="fas fa-chevron-right"></i> Creative Arts</a></li>
+                        <li><a href="#"><i class="fas fa-chevron-right"></i> Social Impact</a></li>
+                        <li><a href="#"><i class="fas fa-chevron-right"></i> Trending Now</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h3 class="footer-heading">Resources</h3>
+                    <ul class="footer-links">
+                        <li><a href="#"><i class="fas fa-chevron-right"></i> How FundFlow Works</a></li>
+                        <li><a href="#"><i class="fas fa-chevron-right"></i> Creator Handbook</a></li>
+                        <li><a href="#"><i class="fas fa-chevron-right"></i> Backer Guide</a></li>
+                        <li><a href="#"><i class="fas fa-chevron-right"></i> Trust & Safety</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h3 class="footer-heading">Company</h3>
+                    <ul class="footer-links">
+                        <li><a href="#"><i class="fas fa-chevron-right"></i> About Us</a></li>
+                        <li><a href="#"><i class="fas fa-chevron-right"></i> Careers</a></li>
+                        <li><a href="#"><i class="fas fa-chevron-right"></i> Press</a></li>
+                        <li><a href="#"><i class="fas fa-chevron-right"></i> Contact</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="copyright">
+                &copy; 2023 FundFlow. All rights reserved. | <a href="#" style="color: var(--light-primary); text-decoration: none;">Privacy Policy</a> | <a href="#" style="color: var(--light-primary); text-decoration: none;">Terms of Service</a>
+            </div>
+        </div>
+    </footer>
+    <script>
+// DOM Elements
+const projectsGrid = document.getElementById('projects-grid');
+
+// Sample project data with online images
+const projects = [
+    {
+        id: 1,
+        title: "NovaLens - AI-Powered Camera",
+        category: "Technology",
+        categoryClass: "tech",
+        creator: "Alex Chen",
+        creatorInitials: "AC",
+        daysLeft: 12,
+        goal: 75000,
+        currentFunding: 89250,
+        backers: 142,
+        description: "Revolutionary camera that uses AI to enhance every shot automatically. Perfect for both professionals and beginners.",
+        image: "https://images.unsplash.com/photo-1516035069371-29a1b244cc32?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+        color: "#3B82F6"
+    },
+    {
+        id: 2,
+        title: "Urban Canvas Street Art Festival",
+        category: "Art & Design",
+        categoryClass: "art",
+        creator: "Maya Patel",
+        creatorInitials: "MP",
+        daysLeft: 28,
+        goal: 25000,
+        currentFunding: 31800,
+        backers: 89,
+        description: "A city-wide street art festival transforming blank walls into vibrant masterpieces. Celebrating urban creativity.",
+        image: "https://images.unsplash.com/photo-1542744095-fcf48d80b0fd?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+        color: "#8B5CF6"
+    },
+    {
+        id: 3,
+        title: "Sustainable Ocean Cleanup Drone",
+        category: "Social Good",
+        categoryClass: "social",
+        creator: "Ocean Guardians",
+        creatorInitials: "OG",
+        daysLeft: 45,
+        goal: 120000,
+        currentFunding: 98600,
+        backers: 210,
+        description: "Autonomous drone that collects plastic waste from oceans and rivers. Powered by solar energy with zero emissions.",
+        image: "https://images.unsplash.com/photo-1565402170291-8491f14678db?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+        color: "#06B6D4"
+    },
+    {
+        id: 4,
+        title: "Artisanal Microbrewery Expansion",
+        category: "Food & Craft",
+        categoryClass: "food",
+        creator: "Brew Masters Collective",
+        creatorInitials: "BC",
+        daysLeft: 21,
+        goal: 50000,
+        currentFunding: 42300,
+        backers: 156,
+        description: "Expanding our craft brewery to meet growing demand while maintaining small-batch quality and unique flavor profiles.",
+        image: "https://images.unsplash.com/photo-1581094794329-c8112a89af12?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+        color: "#F59E0B"
+    },
+    {
+        id: 5,
+        title: "VR Fitness Adventure Game",
+        category: "Technology",
+        categoryClass: "tech",
+        creator: "Digital Harmony Studios",
+        creatorInitials: "DH",
+        daysLeft: 33,
+        goal: 150000,
+        currentFunding: 112500,
+        backers: 187,
+        description: "Immersive VR fitness game with lifelike audio and visuals. Burn calories while exploring virtual worlds.",
+        image: "https://images.unsplash.com/photo-1511512578047-dfb367046420?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+        color: "#10B981"
+    },
+    {
+        id: 6,
+        title: "Educational Science Series",
+        category: "Film & Video",
+        categoryClass: "film",
+        creator: "Bright Minds Media",
+        creatorInitials: "BM",
+        daysLeft: 18,
+        goal: 60000,
+        currentFunding: 48700,
+        backers: 132,
+        description: "Fun, engaging animation that teaches science and critical thinking skills to children ages 5-10. 12 episodes planned.",
+        image: "https://images.unsplash.com/photo-1503676260728-1c00da094a0b?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+        color: "#EC4899"
+    }
+];
+
+// Render projects to the grid
+function renderProjects(filter = 'all') {
+    if (!projectsGrid) return;
+    
+    projectsGrid.innerHTML = '';
+    
+    const filteredProjects = filter === 'all' 
+        ? projects 
+        : projects.filter(project => project.categoryClass === filter);
+    
+    filteredProjects.forEach(project => {
+        const percentage = Math.min(Math.round((project.currentFunding / project.goal) * 100), 100);
+        const fundingText = project.currentFunding >= project.goal ? "Fully Funded!" : `$${project.currentFunding.toLocaleString()} funded`;
+        
+        const projectCard = document.createElement('div');
+        projectCard.className = 'project-card';
+        projectCard.dataset.id = project.id;
+        projectCard.dataset.category = project.categoryClass;
+        
+        projectCard.innerHTML = `
+            <div class="project-header">
+                <div class="project-category">${project.category}</div>
+                <div class="project-favorite">
+                    <i class="far fa-heart"></i>
+                </div>
+            </div>
+            
+            <div class="project-image">
+                <div class="project-image-content">
+                    <img src="${project.image}" alt="${project.title}" style="width: 100%; height: 100%; object-fit: cover;">
+                </div>
+            </div>
+            
+            <div class="project-info">
+                <h3 class="project-title">${project.title}</h3>
+                <p class="project-description">${project.description}</p>
+                
+                <div class="project-creator">
+                    <div class="creator-avatar" style="background: linear-gradient(135deg, ${project.color}, ${project.color}80);">
+                        ${project.creatorInitials}
+                    </div>
+                    <div class="creator-info">
+                        <h4>${project.creator}</h4>
+                        <p>${project.daysLeft} days left</p>
+                    </div>
+                </div>
+                
+                <div class="project-progress">
+                    <div class="progress-header">
+                        <div class="progress-percentage">${percentage}%</div>
+                        <div class="progress-goal">Goal: $${project.goal.toLocaleString()}</div>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: ${percentage}%; background: linear-gradient(90deg, ${project.color}, ${project.color}80);"></div>
+                    </div>
+                </div>
+                
+                <div class="project-stats">
+                    <div class="stat">
+                        <div class="stat-value">$${project.currentFunding.toLocaleString()}</div>
+                        <div class="stat-label">Funded</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value">${project.backers.toLocaleString()}</div>
+                        <div class="stat-label">Backers</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-value">${project.daysLeft}</div>
+                        <div class="stat-label">Days Left</div>
+                    </div>
+                </div>
+                
+                <div class="project-actions">
+                    <button class="btn btn-outline details-btn" data-id="${project.id}">
+                        <i class="fas fa-info-circle"></i> Details
+                    </button>
+                    <button class="btn btn-primary support-btn" data-id="${project.id}">
+                        <i class="fas fa-heart"></i> Support
+                    </button>
+                </div>
+            </div>
+        `;
+        
+        projectsGrid.appendChild(projectCard);
+    });
+    
+    // Add event listeners to buttons
+    document.querySelectorAll('.details-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+            const projectId = parseInt(this.dataset.id);
+            openProjectModal(projectId);
+        });
+    });
+    
+    document.querySelectorAll('.support-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+            const projectId = parseInt(this.dataset.id);
+            openSupportModal(projectId);
+        });
+    });
+    
+    document.querySelectorAll('.project-favorite').forEach(btn => {
+        btn.addEventListener('click', function() {
+            const heartIcon = this.querySelector('i');
+            heartIcon.classList.toggle('far');
+            heartIcon.classList.toggle('fas');
+            heartIcon.style.color = heartIcon.classList.contains('fas') ? '#EF4444' : '';
+        });
+    });
+}
+
+// Open project details modal
+function openProjectModal(projectId) {
+    const project = projects.find(p => p.id === projectId);
+    if (!project) return;
+    
+    const percentage = Math.min(Math.round((project.currentFunding / project.goal) * 100), 100);
+    
+    // Update modal content
+    document.getElementById('modal-project-title').textContent = project.title;
+    document.getElementById('modal-creator-avatar').textContent = project.creatorInitials;
+    document.getElementById('modal-creator-name').textContent = project.creator;
+    document.getElementById('modal-created-date').textContent = `${project.daysLeft} days ago`;
+    document.getElementById('modal-progress-percentage').textContent = `${percentage}%`;
+    document.getElementById('modal-project-goal').textContent = `$${project.goal.toLocaleString()}`;
+    document.getElementById('modal-progress-fill').style.width = `${percentage}%`;
+    document.getElementById('modal-funded-amount').textContent = `$${project.currentFunding.toLocaleString()}`;
+    document.getElementById('modal-backers-count').textContent = project.backers.toLocaleString();
+    document.getElementById('modal-days-left').textContent = project.daysLeft;
+    document.getElementById('modal-project-description').textContent = project.description;
+    
+    // Show modal
+    document.getElementById('project-modal').style.display = 'flex';
+}
+
+// Open support modal
+function openSupportModal(projectId) {
+    const project = projects.find(p => p.id === projectId);
+    if (!project) return;
+    
+    // For now, just open the project modal at contribution section
+    openProjectModal(projectId);
+}
+
+// Initialize when page loads
+document.addEventListener('DOMContentLoaded', function() {
+    // Render initial projects
+    renderProjects();
+    
+    // Category filter functionality
+    document.querySelectorAll('.category-filter').forEach(filter => {
+        filter.addEventListener('click', function() {
+            // Remove active class from all filters
+            document.querySelectorAll('.category-filter').forEach(f => {
+                f.classList.remove('active');
+            });
+            
+            // Add active class to clicked filter
+            this.classList.add('active');
+            
+            // Filter projects
+            const filterValue = this.dataset.filter;
+            renderProjects(filterValue);
+        });
+    });
+    
+    // Load More Projects button
+    document.getElementById('load-more-btn')?.addEventListener('click', function() {
+        // Simulate loading more projects
+        const newProjects = [
+            {
+                id: 7,
+                title: "Smart Home Garden System",
+                category: "Technology",
+                categoryClass: "tech",
+                creator: "Green Tech Innovations",
+                creatorInitials: "GT",
+                daysLeft: 15,
+                goal: 45000,
+                currentFunding: 28500,
+                backers: 94,
+                description: "Automated indoor gardening system with AI-powered plant care and mobile app control.",
+                image: "img/img7.jpg",
+                color: "#10B981"
+            },
+            {
+                id: 8,
+                title: "Independent Documentary Film",
+                category: "Film & Video",
+                categoryClass: "film",
+                creator: "Truth Seekers Studio",
+                creatorInitials: "TS",
+                daysLeft: 42,
+                goal: 80000,
+                currentFunding: 52300,
+                backers: 167,
+                description: "Feature-length documentary exploring renewable energy solutions across three continents.",
+                image: "img/img8.jpg",
+                color: "#EC4899"
+            }
+        ];
+        
+        // Add to projects array
+        projects.push(...newProjects);
+        
+        // Re-render with current filter
+        const activeFilter = document.querySelector('.category-filter.active').dataset.filter;
+        renderProjects(activeFilter);
+        
+        // Show success message
+        const successModal = document.getElementById('success-modal');
+        const successMessage = document.getElementById('success-message');
+        successMessage.textContent = "2 new projects loaded successfully!";
+        successModal.style.display = 'flex';
+    });
+    
+    // Close modal events
+    document.getElementById('close-modal')?.addEventListener('click', function() {
+        document.getElementById('project-modal').style.display = 'none';
+    });
+    
+    document.getElementById('close-success-modal')?.addEventListener('click', function() {
+        document.getElementById('success-modal').style.display = 'none';
+    });
+    
+    // Theme toggle
+    document.getElementById('theme-toggle')?.addEventListener('click', function() {
+        document.body.classList.toggle('dark-mode');
+        const icon = this.querySelector('i');
+        if (document.body.classList.contains('dark-mode')) {
+            icon.className = 'fas fa-sun';
+        } else {
+            icon.className = 'fas fa-moon';
+        }
+    });
+    
+    // Contribution functionality
+    document.querySelectorAll('.amount-option').forEach(option => {
+        option.addEventListener('click', function() {
+            document.querySelectorAll('.amount-option').forEach(opt => {
+                opt.classList.remove('selected');
+            });
+            this.classList.add('selected');
+        });
+    });
+    
+    document.querySelectorAll('.payment-method').forEach(method => {
+        method.addEventListener('click', function() {
+            document.querySelectorAll('.payment-method').forEach(m => {
+                m.classList.remove('selected');
+            });
+            this.classList.add('selected');
+        });
+    });
+    
+    // Contribute button
+    document.getElementById('contribute-btn')?.addEventListener('click', function() {
+        const selectedAmount = document.querySelector('.amount-option.selected')?.dataset.amount;
+        const customAmount = document.getElementById('custom-amount').value;
+        const amount = customAmount || selectedAmount;
+        
+        if (!amount || amount < 1) {
+            alert('Please select or enter a contribution amount');
+            return;
+        }
+        
+        const successModal = document.getElementById('success-modal');
+        const successMessage = document.getElementById('success-message');
+        successMessage.textContent = `Thank you for your contribution of $${amount}! Your support helps bring creative projects to life.`;
+        successModal.style.display = 'flex';
+        
+        // Close project modal
+        document.getElementById('project-modal').style.display = 'none';
+    });
+});
+    </script>
+</body>
+</html>
